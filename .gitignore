@@ -1,0 +1,12 @@
+*.log
+*.pot
+*.pyc
+__pycache__/
+uploads/*
+media/*
+lab/*
+staticfiles/*
+env/*
+.env
+db.sqlite3
+*.sqlite3
