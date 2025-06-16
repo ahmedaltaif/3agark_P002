@@ -1,0 +1,88 @@
+{% extends "layouts/dashboard.html" %}
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-[25px] mb-[25px]">
+    <!-- Available Apartments Section -->
+    <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+        <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+            <div class="flex items-center justify-between">
+                <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">الوحدات المتاحة</h5>
+                <div class="w-[36px] h-[36px] rounded-full bg-warning-500/20 flex items-center justify-center">
+                    <i class="material-symbols-outlined text-warning-500">check_circle</i>
+                </div>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                        <th class="py-3 text-right font-medium text-black dark:text-white">رقم الوحدة</th>
+                        <th class="py-3 text-right font-medium text-black dark:text-white">الطابق</th>
+                        <th class="py-3 text-right font-medium text-black dark:text-white">المساحة</th>
+                        <th class="py-3 text-right font-medium text-black dark:text-white">السعر</th>
+                        <th class="py-3 text-right font-medium text-black dark:text-white">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for apartment in available_apartments %}
+                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                        <td class="py-3 text-gray-600 dark:text-gray-300">{{ apartment.number }}</td>
+                        <td class="py-3 text-gray-600 dark:text-gray-300">{{ apartment.floor }}</td>
+                        <td class="py-3 text-gray-600 dark:text-gray-300">{{ apartment.area }} م²</td>
+                        <td class="py-3 text-gray-600 dark:text-gray-300">{{ apartment.price }} ريال</td>
+                        <td class="py-3">
+                            <a href="{% url 'P002:apartments_detail' apartment.id %}" class="text-primary-500 hover:underline">عرض التفاصيل</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="py-4 text-center text-gray-600 dark:text-gray-300">لا توجد وحدات متاحة حالياً</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Occupied Apartments Section -->
+    <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+        <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+            <div class="flex items-center justify-between">
+                <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">الوحدات المشغولة</h5>
+                <div class="w-[36px] h-[36px] rounded-full bg-danger-500/20 flex items-center justify-center">
+                    <i class="material-symbols-outlined text-danger-500">home</i>
+                </div>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                        <th class="py-3 text-right font-medium text-black dark:text-white">رقم الوحدة</th>
+                        <th class="py-3 text-right font-medium text-black dark:text-white">المستأجر</th>
+                        <th class="py-3 text-right font-medium text-black dark:text-white">تاريخ بداية العقد</th>
+                        <th class="py-3 text-right font-medium text-black dark:text-white">تاريخ نهاية العقد</th>
+                        <th class="py-3 text-right font-medium text-black dark:text-white">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for apartment in occupied_apartments %}
+                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                        <td class="py-3 text-gray-600 dark:text-gray-300">{{ apartment.number }}</td>
+                        <td class="py-3 text-gray-600 dark:text-gray-300">{{ apartment.current_contract.tenant_name }}</td>
+                        <td class="py-3 text-gray-600 dark:text-gray-300">{{ apartment.current_contract.start_date }}</td>
+                        <td class="py-3 text-gray-600 dark:text-gray-300">{{ apartment.current_contract.end_date }}</td>
+                        <td class="py-3">
+                            <a href="{% url 'P002:apartments_detail' apartment.id %}" class="text-primary-500 hover:underline">عرض التفاصيل</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="py-4 text-center text-gray-600 dark:text-gray-300">لا توجد وحدات مشغولة حالياً</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 

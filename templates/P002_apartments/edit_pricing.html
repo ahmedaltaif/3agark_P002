@@ -1,0 +1,65 @@
+{% extends "layouts/dashboard.html" %}
+{% load custom_filters %}
+{% block content %}
+<!-- Breadcrumb -->
+<div class="mb-[25px] md:flex items-center justify-between rtl:flex-row-reverse">
+    <h5 class="!mb-0">تعديل أسعار الوحدة {{ apartment.unit_number }}</h5>
+    <ol class="breadcrumb mt-[12px] md:mt-0 rtl:justify-start">
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            <a href="{% url 'P002:home' %}" class="inline-block relative ltr:pl-[22px] rtl:pr-[22px] transition-all hover:text-primary-500">
+                <i class="material-symbols-outlined absolute ltr:left-0 rtl:right-0 !text-lg -mt-px text-primary-500 top-1/2 -translate-y-1/2">
+                    home
+                </i>
+                الرئيسية
+            </a>
+        </li>
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            <a href="{% url 'P002:apartments_pricing' %}" class="inline-block relative transition-all hover:text-primary-500">
+                أسعار الوحدات
+            </a>
+        </li>
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            تعديل الأسعار
+        </li>
+    </ol>
+</div>
+
+<div class="trezo-card bg-white dark:bg-[#0c1427] mb-[25px] p-[20px] md:p-[25px] rounded-md">
+    <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+        <h6 class="!mb-0 font-bold text-lg text-black dark:text-white">تعديل الأسعار</h6>
+    </div>
+
+    <div class="trezo-card-content">
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label class="block text-black dark:text-white mb-2">السعر اليومي (SDG)</label>
+                <input type="number" name="daily_rent" value="{{ apartment.daily_rent }}" step="0.01" min="0" required
+                    class="bg-gray-50 border border-gray-50 h-[42px] text-sm rounded-md w-full block text-black pt-[11px] pb-[12px] px-[13px] placeholder:text-gray-500 outline-0 dark:bg-[#15203c] dark:text-white dark:border-[#15203c] dark:placeholder:text-gray-400">
+            </div>
+
+            <div class="form-group">
+                <label class="block text-black dark:text-white mb-2">السعر الأسبوعي (SDG)</label>
+                <input type="number" name="weekly_rent" value="{{ apartment.weekly_rent }}" step="0.01" min="0" required
+                    class="bg-gray-50 border border-gray-50 h-[42px] text-sm rounded-md w-full block text-black pt-[11px] pb-[12px] px-[13px] placeholder:text-gray-500 outline-0 dark:bg-[#15203c] dark:text-white dark:border-[#15203c] dark:placeholder:text-gray-400">
+            </div>
+
+            <div class="form-group">
+                <label class="block text-black dark:text-white mb-2">السعر الشهري (SDG)</label>
+                <input type="number" name="monthly_rent" value="{{ apartment.monthly_rent }}" step="0.01" min="0" required
+                    class="bg-gray-50 border border-gray-50 h-[42px] text-sm rounded-md w-full block text-black pt-[11px] pb-[12px] px-[13px] placeholder:text-gray-500 outline-0 dark:bg-[#15203c] dark:text-white dark:border-[#15203c] dark:placeholder:text-gray-400">
+            </div>
+
+            <div class="flex items-center gap-[15px] mt-[25px]">
+                <button type="submit" class="inline-block transition-all rounded-md font-medium px-[25px] py-[7px] text-white bg-primary-500 hover:bg-primary-600">
+                    حفظ التغييرات
+                </button>
+                <a href="{% url 'P002:apartments_pricing' %}" class="inline-block transition-all rounded-md font-medium px-[25px] py-[7px] text-gray-500 border border-gray-500 hover:bg-gray-500 hover:text-white">
+                    إلغاء
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

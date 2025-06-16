@@ -1,0 +1,69 @@
+{% extends "layouts/dashboard.html" %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[25px] mb-[25px]">
+    <!-- Total Contracts Card -->
+    <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+        <div class="flex items-center justify-between mb-[15px]">
+            <h5 class="text-black dark:text-white font-medium">إجمالي العقود</h5>
+            <div class="w-[36px] h-[36px] rounded-full bg-primary-500/20 flex items-center justify-center">
+                <i class="material-symbols-outlined text-primary-500">description</i>
+            </div>
+        </div>
+        <h3 class="text-2xl font-bold text-black dark:text-white mb-[5px]">{{ total_contracts }}</h3>
+        <a href="{% url 'P002:contracts_show' %}" class="text-sm text-primary-500 hover:underline">عرض العقود</a>
+    </div>
+
+    <!-- Total Apartments Card -->
+    <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+        <div class="flex items-center justify-between mb-[15px]">
+            <h5 class="text-black dark:text-white font-medium">إجمالي الوحدات</h5>
+            <div class="w-[36px] h-[36px] rounded-full bg-success-500/20 flex items-center justify-center">
+                <i class="material-symbols-outlined text-success-500">apartment</i>
+            </div>
+        </div>
+        <h3 class="text-2xl font-bold text-black dark:text-white mb-[5px]">{{ total_apartments }}</h3>
+        <a href="{% url 'P002:apartments_show' %}" class="text-sm text-success-500 hover:underline">عرض الوحدات</a>
+    </div>
+
+    <!-- Available Apartments Card -->
+    <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+        <div class="flex items-center justify-between mb-[15px]">
+            <h5 class="text-black dark:text-white font-medium">الوحدات المتاحة</h5>
+            <div class="w-[36px] h-[36px] rounded-full bg-warning-500/20 flex items-center justify-center">
+                <i class="material-symbols-outlined text-warning-500">check_circle</i>
+            </div>
+        </div>
+        <h3 class="text-2xl font-bold text-black dark:text-white mb-[5px]">{{ available_apartments }}</h3>
+        <a href="{% url 'P002:apartments_status' %}" class="text-sm text-warning-500 hover:underline">متاحة للإيجار</a>
+    </div>
+
+    <!-- Occupied Apartments Card -->
+    <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+        <div class="flex items-center justify-between mb-[15px]">
+            <h5 class="text-black dark:text-white font-medium">الوحدات المشغولة</h5>
+            <div class="w-[36px] h-[36px] rounded-full bg-danger-500/20 flex items-center justify-center">
+                <i class="material-symbols-outlined text-danger-500">home</i>
+            </div>
+        </div>
+        <h3 class="text-2xl font-bold text-black dark:text-white mb-[5px]">{{ occupied_apartments }}</h3>
+        <a href="{% url 'P002:apartments_occupied' %}" class="text-sm text-danger-500 hover:underline">عرض الوحدات المشغولة</a>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+    <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+        <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">إجراءات سريعة</h5>
+    </div>
+    <div class="flex flex-wrap gap-[15px]">
+        <a href="{% url 'P002:contracts_add' %}" class="inline-block px-[20px] py-[10px] bg-primary-500 text-white rounded-md hover:bg-primary-600 transition">
+            <i class="material-symbols-outlined">add</i>
+            إضافة عقد جديد
+        </a>
+        <a href="{% url 'P002:apartments_add' %}" class="inline-block px-[20px] py-[10px] bg-primary-500 text-white rounded-md hover:bg-primary-600 transition">
+            <i class="material-symbols-outlined">add</i>
+            إضافة وحدة جديدة
+        </a>
+    </div>
+</div>
+{% endblock %}

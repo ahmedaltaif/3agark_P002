@@ -1,0 +1,123 @@
+{% extends "layouts/dashboard.html" %}
+{% block content %}
+<!-- Breadcrumb -->
+<div class="mb-[25px] md:flex items-center justify-between rtl:flex-row-reverse">
+    <h5 class="!mb-0">إدارة الوحدات</h5>
+    <ol class="breadcrumb mt-[12px] md:mt-0 rtl:justify-start">
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            <a href="{% url 'P002:home' %}" class="inline-block relative ltr:pl-[22px] rtl:pr-[22px] transition-all hover:text-primary-500">
+                <i class="material-symbols-outlined absolute ltr:left-0 rtl:right-0 !text-lg -mt-px text-primary-500 top-1/2 -translate-y-1/2">
+                    home
+                </i>
+                الرئيسية
+            </a>
+        </li>
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            إدارة الوحدات
+        </li>
+    </ol>
+</div>
+
+<div class="trezo-card bg-white dark:bg-[#0c1427] mb-[25px] p-[20px] md:p-[25px] rounded-md">
+    <div class="trezo-card-header mb-[20px] md:mb-[25px] sm:flex items-center justify-between">
+        <div class="trezo-card-title">
+            <form method="get" class="relative sm:w-[265px]">
+                <label class="leading-none absolute ltr:left-[13px] rtl:right-[13px] text-black dark:text-white mt-px top-1/2 -translate-y-1/2">
+                    <i class="material-symbols-outlined !text-[20px]">search</i>
+                </label>
+                <input type="text" name="search" placeholder="ابحث عن وحدة..." class="bg-gray-50 border border-gray-50 h-[36px] text-xs rounded-md w-full block text-black pt-[11px] pb-[12px] ltr:pl-[38px] rtl:pr-[38px] ltr:pr-[13px] rtl:pl-[13px] placeholder:text-gray-500 outline-0 dark:bg-[#15203c] dark:text-white dark:border-[#15203c] dark:placeholder:text-gray-400">
+            </form>
+        </div>
+        <div class="trezo-card-subtitle mt-[15px] sm:mt-0">
+            <a href="{% url 'P002:apartments_add' %}" class="inline-block transition-all rounded-md font-medium px-[13px] py-[6px] text-primary-500 border border-primary-500 hover:bg-primary-500 hover:text-white">
+                <span class="inline-block relative ltr:pl-[22px] rtl:pr-[22px]">
+                    <i class="material-symbols-outlined !text-[22px] absolute ltr:-left-[4px] rtl:-right-[4px] top-1/2 -translate-y-1/2">add</i>
+                    إضافة وحدة سكنية
+                </span>
+            </a>
+        </div>
+    </div>
+
+    <div class="trezo-card-content -mx-[20px] md:-mx-[25px]">
+        <div class="table-responsive overflow-x-auto">
+            <table class="w-full without-border">
+                <thead class="text-black dark:text-white">
+                    <tr>
+                        <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">رقم الوحدة</th>
+                        <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">النوع</th>
+                        <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">السعر الشهري</th>
+                        <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">الحالة</th>
+                        <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody class="text-black dark:text-white">
+                    {% for apartment in apartments %}
+                    <tr class="border-b border-gray-100 dark:border-[#172036]">
+                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.unit_number }}</td>
+                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.unit_type }}</td>
+                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.monthly_rent }} SDG</td>
+                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.is_occupied }}</td>
+                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap">
+                            <div class="flex items-center justify-center gap-[9px]">
+                                <a href="{% url 'P002:apartments_edit' apartment.id %}" class="text-gray-500 dark:text-gray-400 custom-tooltip" data-text="تعديل">
+                                    <i class="material-symbols-outlined !text-md">edit</i>
+                                </a>
+                                <a href="{% url 'P002:apartments_confirm' apartment.id %}" class="text-danger-500 custom-tooltip" data-text="حذف">
+                                    <i class="material-symbols-outlined !text-md">delete</i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-gray-500">لا توجد وحدات حالياً.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                
+                
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="px-[20px] md:px-[25px] pt-[12px] md:pt-[14px] sm:flex sm:items-center justify-between">
+        <p class="!mb-0 text-sm">
+            عرض {{ page_obj.start_index }} إلى {{ page_obj.end_index }} من {{ page_obj.paginator.count }} نتيجة
+        </p>
+        {% if page_obj.has_other_pages %}
+        <ol class="mt-[10px] sm:mt-0">
+            {% if page_obj.has_previous %}
+            <li class="inline-block mx-[1px] ltr:first:ml-0 ltr:last:mr-0 rtl:first:mr-0 rtl:last:ml-0">
+                <a href="?page={{ page_obj.previous_page_number }}" class="w-[31px] h-[31px] block leading-[29px] relative text-center rounded-md border border-gray-100 dark:border-[#172036] transition-all hover:bg-primary-500 hover:text-white hover:border-primary-500">
+                    <span class="opacity-0">0</span>
+                    <i class="material-symbols-outlined left-0 right-0 absolute top-1/2 -translate-y-1/2 rtl:-scale-x-100">chevron_left</i>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="inline-block mx-[1px] ltr:first:ml-0 ltr:last:mr-0 rtl:first:mr-0 rtl:last:ml-0">
+                    <span class="w-[31px] h-[31px] block leading-[29px] relative text-center rounded-md border border-primary-500 bg-primary-500 text-white">{{ num }}</span>
+                </li>
+                {% else %}
+                <li class="inline-block mx-[1px] ltr:first:ml-0 ltr:last:mr-0 rtl:first:mr-0 rtl:last:ml-0">
+                    <a href="?page={{ num }}" class="w-[31px] h-[31px] block leading-[29px] relative text-center rounded-md border border-gray-100 dark:border-[#172036] transition-all hover:bg-primary-500 hover:text-white hover:border-primary-500">{{ num }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="inline-block mx-[1px] ltr:first:ml-0 ltr:last:mr-0 rtl:first:mr-0 rtl:last:ml-0">
+                <a href="?page={{ page_obj.next_page_number }}" class="w-[31px] h-[31px] block leading-[29px] relative text-center rounded-md border border-gray-100 dark:border-[#172036] transition-all hover:bg-primary-500 hover:text-white hover:border-primary-500">
+                    <span class="opacity-0">0</span>
+                    <i class="material-symbols-outlined left-0 right-0 absolute top-1/2 -translate-y-1/2 rtl:-scale-x-100">chevron_right</i>
+                </a>
+            </li>
+            {% endif %}
+        </ol>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

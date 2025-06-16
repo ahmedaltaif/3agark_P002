@@ -1,0 +1,12 @@
+{% load crispy_forms_field %}
+
+<div class="relative">
+    <select class="h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 appearance-none" name="{{ field.html_name }}" id="id_{{ field.html_name }}" {% if field.field.required %}required{% endif %}>
+        {% for choice in field.field.choices %}
+            <option value="{{ choice.0 }}" {% if choice.0 == field.value %}selected{% endif %}>{{ choice.1 }}</option>
+        {% endfor %}
+    </select>
+    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4">
+        <i class="material-symbols-outlined text-gray-500 dark:text-gray-400">expand_more</i>
+    </div>
+</div> 

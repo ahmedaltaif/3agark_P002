@@ -1,0 +1,118 @@
+{% extends "layouts/dashboard.html" %}
+{% load custom_filters %}
+{% block content %}
+<!-- Breadcrumb -->
+<div class="mb-[25px] md:flex items-center justify-between rtl:flex-row-reverse">
+    <h5 class="!mb-0">أسعار الوحدات</h5>
+    <ol class="breadcrumb mt-[12px] md:mt-0 rtl:justify-start">
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            <a href="{% url 'P002:home' %}" class="inline-block relative ltr:pl-[22px] rtl:pr-[22px] transition-all hover:text-primary-500">
+                <i class="material-symbols-outlined absolute ltr:left-0 rtl:right-0 !text-lg -mt-px text-primary-500 top-1/2 -translate-y-1/2">
+                    home
+                </i>
+                الرئيسية
+            </a>
+        </li>
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            أسعار الوحدات
+        </li>
+    </ol>
+</div>
+
+<div class="trezo-card bg-white dark:bg-[#0c1427] mb-[25px] p-[20px] md:p-[25px] rounded-md">
+    <div class="trezo-card-header mb-[20px] md:mb-[25px] sm:flex items-center justify-between">
+        <div class="trezo-card-title">
+            <form method="get" class="relative sm:w-[265px]">
+                <label class="leading-none absolute ltr:left-[13px] rtl:right-[13px] text-black dark:text-white mt-px top-1/2 -translate-y-1/2">
+                    <i class="material-symbols-outlined !text-[20px]">search</i>
+                </label>
+                <input type="text" name="search" value="{{ search_query }}" placeholder="ابحث عن وحدة..." class="bg-gray-50 border border-gray-50 h-[36px] text-xs rounded-md w-full block text-black pt-[11px] pb-[12px] ltr:pl-[38px] rtl:pr-[38px] ltr:pr-[13px] rtl:pl-[13px] placeholder:text-gray-500 outline-0 dark:bg-[#15203c] dark:text-white dark:border-[#15203c] dark:placeholder:text-gray-400">
+            </form>
+        </div>
+    </div>
+
+    <div class="trezo-card-content -mx-[20px] md:-mx-[25px]">
+        <div class="table-responsive overflow-x-auto">
+            <table class="w-full without-border">
+                <thead class="text-black dark:text-white">
+                    <tr>
+                        <th class="font-medium ltr:text-left rtl:text-right px-[20px] py-[11px] md:ltr:first:pl-[25px] md:rtl:first:pr-[25px] ltr:first:pr-0 rtl:first:pl-0 bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">
+                            رقم الوحدة
+                        </th>
+                        <th class="font-medium ltr:text-left rtl:text-right px-[20px] py-[11px] md:ltr:first:pl-[25px] md:rtl:first:pr-[25px] ltr:first:pr-0 rtl:first:pl-0 bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">
+                            نوع الوحدة
+                        </th>
+                        <th class="font-medium ltr:text-left rtl:text-right px-[20px] py-[11px] md:ltr:first:pl-[25px] md:rtl:first:pr-[25px] ltr:first:pr-0 rtl:first:pl-0 bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">
+                            السعر اليومي
+                        </th>
+                        <th class="font-medium ltr:text-left rtl:text-right px-[20px] py-[11px] md:ltr:first:pl-[25px] md:rtl:first:pr-[25px] ltr:first:pr-0 rtl:first:pl-0 bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">
+                            السعر الأسبوعي
+                        </th>
+                        <th class="font-medium ltr:text-left rtl:text-right px-[20px] py-[11px] md:ltr:first:pl-[25px] md:rtl:first:pr-[25px] ltr:first:pr-0 rtl:first:pl-0 bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">
+                            السعر الشهري
+                        </th>
+                        <th class="font-medium ltr:text-left rtl:text-right px-[20px] py-[11px] md:ltr:first:pl-[25px] md:rtl:first:pr-[25px] ltr:first:pr-0 rtl:first:pl-0 bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">
+                            الإجراء
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="text-black dark:text-white">
+                    {% for apartment in apartments %}
+                    <tr class="border-b border-gray-100 dark:border-[#172036]">
+                        <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ apartment.unit_number }}</td>
+                        <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ apartment.unit_type }}</td>
+                        <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ apartment.daily_rent|format_number }} SDG</td>
+                        <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ apartment.weekly_rent|format_number }} SDG</td>
+                        <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ apartment.monthly_rent|format_number }} SDG</td>
+                        <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">
+                            <div class="flex items-center gap-[9px]">
+                                <a href="{% url 'P002:apartments_edit_pricing' apartment.id %}" class="text-primary-500 leading-none custom-tooltip" data-text="تعديل الأسعار">
+                                    <i class="material-symbols-outlined !text-md">edit</i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-gray-500">لا توجد وحدات حالياً.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="px-[20px] md:px-[25px] pt-[12px] md:pt-[14px] sm:flex sm:items-center justify-between">
+        <p class="!mb-0 text-sm">
+            عرض {{ page_obj.start_index }} إلى {{ page_obj.end_index }} من {{ page_obj.paginator.count }} نتيجة
+        </p>
+        <nav class="mt-[10px] sm:mt-0 flex items-center gap-[5px]">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="h-[38px] w-[38px] flex items-center justify-center rounded-md bg-gray-50 text-gray-500 dark:bg-[#15203c] dark:text-gray-400 hover:bg-primary-500 hover:text-white dark:hover:bg-primary-500 dark:hover:text-white">
+                <i class="material-symbols-outlined">chevron_right</i>
+            </a>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                <a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}" class="h-[38px] w-[38px] flex items-center justify-center rounded-md bg-primary-500 text-white">
+                    {{ num }}
+                </a>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}" class="h-[38px] w-[38px] flex items-center justify-center rounded-md bg-gray-50 text-gray-500 dark:bg-[#15203c] dark:text-gray-400 hover:bg-primary-500 hover:text-white dark:hover:bg-primary-500 dark:hover:text-white">
+                    {{ num }}
+                </a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="h-[38px] w-[38px] flex items-center justify-center rounded-md bg-gray-50 text-gray-500 dark:bg-[#15203c] dark:text-gray-400 hover:bg-primary-500 hover:text-white dark:hover:bg-primary-500 dark:hover:text-white">
+                <i class="material-symbols-outlined">chevron_left</i>
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

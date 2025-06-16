@@ -1,0 +1,145 @@
+{% extends "layouts/dashboard.html" %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-[25px] mb-[25px]">
+    <form method="post" enctype="multipart/form-data" class="col-span-2">
+        {% csrf_token %}
+        
+        {% if tenant_form.errors or contract_form.errors %}
+            <p class="text-red-600 font-bold mb-[15px]">الرجاء تصحيح الأخطاء في الحقول أدناه.</p>
+        {% endif %}
+
+        <!-- بيانات المستأجر -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+                <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">بيانات المستأجر</h5>
+            </div>
+            <div class="trezo-card-content space-y-[25px]">
+                <div>
+                    <label for="{{ tenant_form.full_name.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                        {{ tenant_form.full_name.label }}{% if tenant_form.full_name.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ tenant_form.full_name }}
+                </div>
+
+                <div>
+                    <label for="{{ tenant_form.id_type.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                        {{ tenant_form.id_type.label }}{% if tenant_form.id_type.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ tenant_form.id_type }}
+                </div>
+
+                <div>
+                    <label for="{{ tenant_form.id_number.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                        {{ tenant_form.id_number.label }}{% if tenant_form.id_number.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ tenant_form.id_number }}
+                </div>
+
+                <div>
+                    <label for="{{ tenant_form.tenant_numer.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                        {{ tenant_form.tenant_numer.label }}{% if tenant_form.tenant_numer.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ tenant_form.tenant_numer }}
+                </div>
+                <div>
+                    <label for="{{ tenant_form.id_image.id_for_label }}" class="mb-[10px] text-black dark:text-white font-medium block">
+                        {{ tenant_form.id_image.label }}{% if tenant_form.id_image.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    <div id="fileUploader" class="relative">
+                        <div class="upload-box relative flex items-center justify-center overflow-hidden rounded-md py-[88px] px-[20px] border border-gray-200 dark:border-[#172036]">
+                            <div class="flex items-center justify-center">
+                                <div class="w-[35px] h-[35px] border border-gray-100 dark:border-[#15203c] flex items-center justify-center rounded-md text-primary-500 text-lg ltr:mr-[12px] rtl:ml-[12px]">
+                                    <i class="ri-upload-2-line"></i>
+                                </div>
+                                <p class="!leading-[1.5]">
+                                    <strong class="text-black dark:text-white">انقر للتحميل</strong><br> الملف الخاص بك هنا
+                                </p>
+                            </div>
+                            <input type="file" name="id_image" id="fileInput" class="absolute top-0 left-0 right-0 bottom-0 h-full w-full opacity-0 cursor-pointer z-[1]" accept="image/*">
+                        </div>
+                        <!-- Image Preview Area -->
+                        <ul id="fileList"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- تفاصيل العقد -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+                <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">تفاصيل العقد</h5>
+            </div>
+            <div class="trezo-card-content space-y-[25px]">
+                <div>
+                    <label for="{{ contract_form.apartment.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                        {{ contract_form.apartment.label }}{% if contract_form.apartment.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ contract_form.apartment }}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-[25px]">
+                    <div>
+                        <label for="{{ contract_form.rent_price.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                            {{ contract_form.rent_price.label }}{% if contract_form.rent_price.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        {{ contract_form.rent_price }}
+                    </div>
+
+                    <div>
+                        <label for="{{ contract_form.payment_method.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                            {{ contract_form.payment_method.label }}{% if contract_form.payment_method.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        {{ contract_form.payment_method }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-[25px]">
+                    <div>
+                        <label for="{{ contract_form.checkin_date.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                            {{ contract_form.checkin_date.label }}{% if contract_form.checkin_date.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        {{ contract_form.checkin_date }}
+                    </div>
+
+                    <div>
+                        <label for="{{ contract_form.issue_date.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                            {{ contract_form.issue_date.label }}{% if contract_form.issue_date.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        {{ contract_form.issue_date }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-[25px]">
+                    <div>
+                        <label for="{{ contract_form.duration_days.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                            {{ contract_form.duration_days.label }}{% if contract_form.duration_days.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        {{ contract_form.duration_days }}
+                    </div>
+
+                    <div>
+                        <label for="{{ contract_form.status.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                            {{ contract_form.status.label }}{% if contract_form.status.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        {{ contract_form.status }}
+                    </div>
+                </div>
+
+                <div>
+                    <label for="{{ contract_form.notes.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                        {{ contract_form.notes.label }}{% if contract_form.notes.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ contract_form.notes }}
+                </div>
+            </div>
+        </div>
+
+        <!-- أزرار -->
+        <div class="flex gap-[15px]">
+            <button type="submit" class="inline-block px-[20px] py-[10px] bg-primary-500 text-white rounded-md hover:bg-primary-600 transition">حفظ العقد</button>
+            <a href="{% url 'P002:contracts_show' %}" class="inline-block px-[20px] py-[10px] bg-gray-200 dark:bg-[#1a233a] text-black dark:text-white rounded-md hover:bg-gray-300 transition">إلغاء</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

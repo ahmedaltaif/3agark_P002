@@ -1,0 +1,5 @@
+{% for field in form %}
+    <div class="mb-[35px]">
+        {% include "crispy/field.html" with field=field %}
+    </div>
+{% endfor %} 

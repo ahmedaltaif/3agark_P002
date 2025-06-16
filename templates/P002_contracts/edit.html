@@ -1,0 +1,144 @@
+{% extends "layouts/dashboard.html" %}
+{% load tailwind_filters %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-[25px] mb-[25px]">
+    <form method="post" enctype="multipart/form-data" class="col-span-2">
+        {% csrf_token %}
+        {% if tenant_form.errors or contract_form.errors %}
+            <p class="text-red-600 font-bold mb-[15px]">الرجاء تصحيح الأخطاء في الحقول أدناه.</p>
+        {% endif %}
+
+        <!-- بيانات المستأجر -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-header mb-[20px] md:mb-[25px] sm:flex items-center justify-between">
+                <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">بيانات المستأجر</h5>
+                <div class="mt-[15px] sm:mt-0">
+                    <a href="{% url 'P002:contracts_show' %}" class="inline-block transition-all rounded-md font-medium px-[13px] py-[6px] text-primary-500 border border-primary-500 hover:bg-primary-500 hover:text-white">
+                        <span class="inline-block relative ltr:pl-[22px] rtl:pr-[22px]">
+                            <i class="material-symbols-outlined !text-[22px] absolute ltr:-left-[4px] rtl:-right-[4px] top-1/2 -translate-y-1/2">arrow_back</i>
+                            العودة للعقود
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <div class="trezo-card-content">
+                <div>
+                    <label for="{{ tenant_form.full_name.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                        {{ tenant_form.full_name.label }}{% if tenant_form.full_name.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ tenant_form.full_name }}
+                </div>
+
+                <div>
+                    <label for="{{ tenant_form.id_type.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                        {{ tenant_form.id_type.label }}{% if tenant_form.id_type.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ tenant_form.id_type }}
+                </div>
+
+                <div>
+                    <label for="{{ tenant_form.id_number.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                        {{ tenant_form.id_number.label }}{% if tenant_form.id_number.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ tenant_form.id_number }}
+                </div>
+
+                <div>
+                    <label for="{{ tenant_form.tenant_numer.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+                        {{ tenant_form.tenant_numer.label }}{% if tenant_form.tenant_numer.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ tenant_form.tenant_numer }}
+                </div>
+
+                <div class="mt-[25px]">
+                    <label for="{{ tenant_form.id_image.id_for_label }}" class="mb-[10px] text-black dark:text-white font-medium block">
+                        {{ tenant_form.id_image.label }}{% if tenant_form.id_image.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    <div id="fileUploader" class="relative">
+                        <div class="upload-box relative flex items-center justify-center overflow-hidden rounded-md py-[88px] px-[20px] border border-gray-200 dark:border-[#172036]">
+                            <div class="flex items-center justify-center">
+                                <div class="w-[35px] h-[35px] border border-gray-100 dark:border-[#15203c] flex items-center justify-center rounded-md text-primary-500 text-lg ltr:mr-[12px] rtl:ml-[12px]">
+                                    <i class="ri-upload-2-line"></i>
+                                </div>
+                                <p class="!leading-[1.5]">
+                                    <strong class="text-black dark:text-white">انقر للتحميل</strong><br> الملف الخاص بك هنا
+                                </p>
+                            </div>
+                            <input type="file" name="id_image" id="fileInput" class="absolute top-0 left-0 right-0 bottom-0 h-full w-full opacity-0 cursor-pointer z-[1]" accept="image/*">
+                        </div>
+                        <!-- Image Preview Area -->
+                        <ul id="fileList">
+                            {% if tenant_form.instance.id_image %}
+                            <li class="mt-[15px] flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-[35px] h-[35px] border border-gray-100 dark:border-[#15203c] flex items-center justify-center rounded-md text-primary-500 text-lg ltr:mr-[12px] rtl:ml-[12px]">
+                                        <i class="ri-image-line"></i>
+                                    </div>
+                                    <span class="text-black dark:text-white">{{ tenant_form.instance.id_image.name }}</span>
+                                </div>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- تفاصيل العقد -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+                <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">تفاصيل العقد</h5>
+            </div>
+            <div class="trezo-card-content">
+                {% crispy contract_form %}
+            </div>
+        </div>
+
+        <!-- أزرار -->
+        <div class="flex gap-[15px]">
+            <button type="submit" class="inline-block px-[20px] py-[10px] bg-primary-500 text-white rounded-md hover:bg-primary-600 transition">حفظ التغييرات</button>
+            <a href="{% url 'P002:contracts_show' %}" class="inline-block px-[20px] py-[10px] bg-gray-200 dark:bg-[#1a233a] text-black dark:text-white rounded-md hover:bg-gray-300 transition">إلغاء</a>
+        </div>
+    </form>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        
+        fileInput.addEventListener('change', function() {
+            fileList.innerHTML = '';
+            
+            if (this.files.length > 0) {
+                const file = this.files[0];
+                const listItem = document.createElement('li');
+                listItem.className = 'mt-[15px] flex items-center justify-between';
+                
+                const fileInfo = document.createElement('div');
+                fileInfo.className = 'flex items-center';
+                
+                const iconContainer = document.createElement('div');
+                iconContainer.className = 'w-[35px] h-[35px] border border-gray-100 dark:border-[#15203c] flex items-center justify-center rounded-md text-primary-500 text-lg ltr:mr-[12px] rtl:ml-[12px]';
+                
+                const icon = document.createElement('i');
+                icon.className = 'ri-image-line';
+                
+                const fileName = document.createElement('span');
+                fileName.className = 'text-black dark:text-white';
+                fileName.textContent = file.name;
+                
+                iconContainer.appendChild(icon);
+                fileInfo.appendChild(iconContainer);
+                fileInfo.appendChild(fileName);
+                listItem.appendChild(fileInfo);
+                fileList.appendChild(listItem);
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %} 

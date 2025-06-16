@@ -1,0 +1,25 @@
+{% extends "layouts/dashboard.html" %}
+{% load tailwind_filters %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-[25px] mb-[25px]">
+    <form method="post" class="col-span-2">
+        {% csrf_token %}
+        <!-- بيانات الوحدة -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+                <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">إضافة وحدة سكنية</h5>
+            </div>
+            <div class="trezo-card-content">
+                {{ apartment_form|crispy }}
+            </div>
+        </div>
+
+        <!-- أزرار الإجراء -->
+        <div class="flex gap-[15px]">
+            <button type="submit" class="inline-block px-[20px] py-[10px] bg-primary-500 text-white rounded-md hover:bg-primary-600 transition">حفظ الوحدة</button>
+            <a href="{% url 'P002:apartments_show' %}" class="inline-block px-[20px] py-[10px] bg-gray-200 dark:bg-[#1a233a] text-black dark:text-white rounded-md hover:bg-gray-300 transition">إلغاء</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

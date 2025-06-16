@@ -1,0 +1,23 @@
+{% load crispy_forms_field %}
+
+<div class="form-group mb-[35px]">
+    {% if field.label %}
+        <label for="{{ field.id_for_label }}" class="mb-[12px] font-medium block text-black dark:text-white">
+            {{ field.label }}{% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+        </label>
+    {% endif %}
+    
+    <div class="controls">
+        {% crispy_field field %}
+        {% if field.help_text %}
+            <div class="help-text text-gray-500 dark:text-gray-400 text-sm mt-[5px]">{{ field.help_text }}</div>
+        {% endif %}
+        {% if field.errors %}
+            <div class="error-text text-red-500 text-sm mt-[5px]">
+                {% for error in field.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div> 

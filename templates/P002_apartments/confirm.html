@@ -1,0 +1,29 @@
+{% extends "layouts/dashboard.html" %}
+{% block content %}
+<div class="trezo-card bg-white dark:bg-[#0c1427] mb-[25px] p-[20px] md:p-[25px] rounded-md">
+    <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+        <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">تأكيد حذف الوحدة السكنية</h5>
+    </div>
+    
+    <div class="text-center">
+        <div class="mb-6">
+            <i class="material-symbols-outlined text-danger-500 text-6xl">warning</i>
+        </div>
+        
+        <p class="text-lg text-black dark:text-white mb-2">هل أنت متأكد من حذف الوحدة السكنية رقم "{{ apartment.unit_number }}"؟</p>
+        <p class="text-gray-500 dark:text-gray-400 mb-6">هذا الإجراء لا يمكن التراجع عنه.</p>
+        
+        <form method="post" class="flex items-center justify-center gap-4">
+            {% csrf_token %}
+            <button type="submit" class="inline-flex items-center gap-[5px] px-[20px] py-[10px] bg-danger-500 text-white rounded-md hover:bg-danger-600 transition">
+                <i class="material-symbols-outlined">delete</i>
+                نعم، احذف الوحدة
+            </button>
+            <a href="{% url 'P002:apartments_show' %}" class="inline-flex items-center gap-[5px] px-[20px] py-[10px] bg-gray-500 text-white rounded-md hover:bg-gray-600 transition">
+                <i class="material-symbols-outlined">close</i>
+                إلغاء
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}
