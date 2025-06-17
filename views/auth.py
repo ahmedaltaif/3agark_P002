@@ -16,10 +16,10 @@ def logout_view(request):
         logout(request)
         
         # Render logout template with user info
-        return render(request, 'registration/logout.html', {'user_info': user_info})
+        return render(request, 'website/landing.html', {'user_info': user_info})
     else:
         # If it's a GET request, show the logout confirmation page
-        return render(request, 'registration/logout.html', {
+        return render(request, 'website/logout.html', {
             'user_info': user_info,
             'not_logged_out': True  # Flag to show different content
         }) 

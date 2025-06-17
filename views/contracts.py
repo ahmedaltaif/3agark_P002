@@ -133,13 +133,19 @@ def edit(request, contract_id):
     })
 
 
+@login_required
 def mark_expired(request, contract_id):
+    contract = get_object_or_404(RentalContract, id=contract_id)
     if request.method == 'POST':
-        contract = get_object_or_404(RentalContract, id=contract_id)
         contract.status = 'expired'
-        contract.save()  # This will automatically update apartment.is_occupied through the save method
-        messages.success(request, 'تم تغيير حالة العقد إلى منتهي')
-    return redirect('P002:contracts_show')
+        contract.save()
+        # Update apartment status
+        apartment = contract.apartment
+        apartment.is_occupied = False
+        apartment.save()
+        messages.success(request, 'تم تغيير حالة العقد إلى منتهي بنجاح')
+        return redirect('P002:apartments_occupied')
+    return render(request, 'P002_contracts/archive.html', {'contract': contract})
 
 
 @login_required
@@ -194,6 +200,30 @@ def terms_edit(request, terms_id):
     return render(request, 'P002_contracts/terms_form.html', {
         'form': form,
         'title': 'تعديل شروط العقد'
+    })
+
+@login_required
+def extend_contract(request, contract_id):
+    contract = get_object_or_404(RentalContract.objects.select_related('tenant'), id=contract_id)
+    
+    if request.method == 'POST':
+        # Only get the duration_days field from the form
+        duration_days = request.POST.get('duration_days')
+        if duration_days:
+            try:
+                contract.duration_days = int(duration_days)
+                contract.save()
+                messages.success(request, 'تم تمديد العقد بنجاح')
+                return redirect('P002:apartments_occupied')
+            except ValueError:
+                messages.error(request, 'يرجى إدخال عدد صحيح للأيام')
+    else:
+        # Pre-fill the form with current duration
+        initial_data = {'duration_days': contract.duration_days}
+    
+    return render(request, 'P002_contracts/extend.html', {
+        'contract': contract,
+        'initial_data': initial_data
     })
 
 

@@ -53,20 +53,22 @@ class TenantForm(forms.ModelForm):
             'id_type',
             'id_number',
             'tenant_numer',
-            'id_image',
+            'id_image', 
+            'marriage_certificate',
         )
         for field in self.fields.values():
             field.widget.attrs['class'] = 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500'
 
     class Meta:
         model = Tenant
-        fields = ['full_name', 'id_type', 'id_number', 'tenant_numer', 'id_image']
+        fields = ['full_name', 'id_type', 'id_number', 'tenant_numer', 'id_image', 'marriage_certificate']
         labels = {
             'full_name': 'الاسم الكامل',
             'id_type': 'نوع الهوية',
             'id_number': 'رقم الهوية',
             'tenant_numer': 'رقم الهاتف',
             'id_image': 'صورة الهوية',
+            'marriage_certificate': 'صورة الشهادة',
         }
         widgets = {
             'full_name': forms.TextInput(attrs={
@@ -90,6 +92,10 @@ class TenantForm(forms.ModelForm):
                 'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500'
             }),
             'id_image': forms.FileInput(attrs={
+                'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
+                'accept': 'image/*'
+            }),
+            'marriage_certificate': forms.FileInput(attrs={
                 'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
                 'accept': 'image/*'
             }),

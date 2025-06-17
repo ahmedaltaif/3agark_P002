@@ -40,29 +40,43 @@
                         <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">المستأجر</th>
                         <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">رقم الهاتف</th>
                         <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">تاريخ الدخول</th>
-                        <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">مدة العقد</th>
+                        <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">تاريخ الانتهاء</th>
+                        <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">الأيام المتبقية</th>
                         <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">الإجراء</th>
                     </tr>
                 </thead>
                 <tbody class="text-black dark:text-white">
                     {% for apartment in occupied_apartments %}
-                    <tr class="border-b border-gray-100 dark:border-[#172036]">
+                    <tr class="border-b border-gray-100 dark:border-[#172036] {% if apartment.active_contract.is_expired %}bg-red-50 dark:bg-red-900/20{% endif %}">
                         <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.unit_number }}</td>
                         <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.active_contract.tenant.full_name }}</td>
                         <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.active_contract.tenant.tenant_numer }}</td>
                         <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.active_contract.checkin_date }}</td>
-                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.active_contract.duration_days }} يوم</td>
+                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.active_contract.end_date }}</td>
+                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap {% if apartment.active_contract.is_expired %}text-red-500 font-bold{% endif %}">
+                            {% if apartment.active_contract.is_expired %}
+                                منتهي
+                            {% else %}
+                                {{ apartment.active_contract.remaining_days }} يوم
+                            {% endif %}
+                        </td>
                         <td class="text-center px-[20px] py-[11px] whitespace-nowrap">
                             <div class="flex items-center justify-center gap-[9px]">
-                                <a href="{% url 'P002:apartments_edit' apartment.id %}" class="text-gray-500 dark:text-gray-400 custom-tooltip" data-text="تعديل">
-                                    <i class="material-symbols-outlined !text-md">edit</i>
+                                <a href="{% url 'P002:contracts_extend' apartment.active_contract.id %}" class="text-primary-500 dark:text-primary-400 custom-tooltip" data-text="تمديد العقد">
+                                    <i class="material-symbols-outlined !text-md">add_alarm</i>
                                 </a>
+                                <form method="post" action="{% url 'P002:contracts_mark_expired' apartment.active_contract.id %}" class="inline" onsubmit="return confirm('هل أنت متأكد من تغيير حالة العقد إلى منتهي؟');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="text-warning-500 dark:text-warning-400 custom-tooltip" data-text="أرشفة العقد">
+                                        <i class="material-symbols-outlined !text-md">archive</i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="text-center py-4 text-gray-500">لا توجد وحدات مشغولة حالياً.</td>
+                        <td colspan="7" class="text-center py-4 text-gray-500">لا توجد وحدات مشغولة حالياً.</td>
                     </tr>
                     {% endfor %}
                 </tbody>

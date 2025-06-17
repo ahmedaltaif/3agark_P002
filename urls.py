@@ -29,10 +29,11 @@ urlpatterns = [
     # Contracts
     path('contracts/', contracts.show, name='contracts_show'),
     path('contracts/add/', contracts.add, name='contracts_add'),
-    path('contracts/archive/', contracts.archive, name='contracts_archive'),
     path('contracts/<int:contract_id>/', contracts.view, name='contracts_view'),
     path('contracts/<int:contract_id>/edit/', contracts.edit, name='contracts_edit'),
+    path('contracts/<int:contract_id>/extend/', contracts.extend_contract, name='contracts_extend'),
     path('contracts/<int:contract_id>/mark-expired/', contracts.mark_expired, name='contracts_mark_expired'),
+    path('contracts/archive/', contracts.archive, name='contracts_archive'),
     
     # Contract Terms
     path('contracts/terms/', contracts.terms_list, name='contracts_terms'),

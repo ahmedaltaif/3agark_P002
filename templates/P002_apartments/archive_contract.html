@@ -1,0 +1,72 @@
+{% extends "layouts/dashboard.html" %}
+{% block content %}
+<!-- Breadcrumb -->
+<div class="mb-[25px] md:flex items-center justify-between rtl:flex-row-reverse">
+    <h5 class="!mb-0">أرشفة العقد</h5>
+    <ol class="breadcrumb mt-[12px] md:mt-0 rtl:justify-start">
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            <a href="{% url 'P002:home' %}" class="inline-block relative ltr:pl-[22px] rtl:pr-[22px] transition-all hover:text-primary-500">
+                <i class="material-symbols-outlined absolute ltr:left-0 rtl:right-0 !text-lg -mt-px text-primary-500 top-1/2 -translate-y-1/2">
+                    home
+                </i>
+                الرئيسية
+            </a>
+        </li>
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            <a href="{% url 'P002:apartments_occupied' %}" class="transition-all hover:text-primary-500">
+                الوحدات المشغولة
+            </a>
+        </li>
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            أرشفة العقد
+        </li>
+    </ol>
+</div>
+
+<div class="trezo-card bg-white dark:bg-[#0c1427] mb-[25px] p-[20px] md:p-[25px] rounded-md">
+    <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+        <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">تأكيد أرشفة العقد</h5>
+    </div>
+
+    <div class="trezo-card-content">
+        <div class="mb-[20px]">
+            <p class="text-gray-500">هل أنت متأكد من رغبتك في أرشفة العقد رقم #{{ contract.contract_num }}؟</p>
+            <p class="text-gray-500 mt-2">سيتم تحديث حالة الوحدة إلى غير مشغولة.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-[25px]">
+            <div>
+                <h6 class="text-black dark:text-white font-bold mb-[15px]">معلومات العقد</h6>
+                <ul class="space-y-[15px]">
+                    <li class="flex items-center justify-between">
+                        <span class="text-gray-500">رقم العقد:</span>
+                        <span class="text-black dark:text-white">#{{ contract.contract_num }}</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span class="text-gray-500">المستأجر:</span>
+                        <span class="text-black dark:text-white">{{ contract.tenant.full_name }}</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span class="text-gray-500">الوحدة:</span>
+                        <span class="text-black dark:text-white">{{ contract.apartment.unit_number }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-[25px] pt-[25px] border-t border-gray-200 dark:border-[#172036]">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="flex items-center gap-[10px]">
+                    <button type="submit" class="inline-block transition-all rounded-md font-medium px-[13px] py-[6px] text-white bg-danger-500 hover:bg-danger-600">
+                        تأكيد الأرشفة
+                    </button>
+                    <a href="{% url 'P002:apartments_occupied' %}" class="inline-block transition-all rounded-md font-medium px-[13px] py-[6px] text-gray-500 border border-gray-200 dark:border-[#172036] hover:bg-gray-50 dark:hover:bg-[#172036]">
+                        إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

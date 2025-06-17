@@ -1,0 +1,166 @@
+{% extends "layouts/dashboard.html" %}
+{% block content %}
+<!-- Breadcrumb -->
+<div class="mb-[25px] md:flex items-center justify-between rtl:flex-row-reverse">
+    <h5 class="!mb-0">تمديد العقد</h5>
+    <ol class="breadcrumb mt-[12px] md:mt-0 rtl:justify-start">
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            <a href="{% url 'P002:home' %}" class="inline-block relative ltr:pl-[22px] rtl:pr-[22px] transition-all hover:text-primary-500">
+                <i class="material-symbols-outlined absolute ltr:left-0 rtl:right-0 !text-lg -mt-px text-primary-500 top-1/2 -translate-y-1/2">
+                    home
+                </i>
+                الرئيسية
+            </a>
+        </li>
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            <a href="{% url 'P002:apartments_occupied' %}" class="transition-all hover:text-primary-500">
+                الوحدات المشغولة
+            </a>
+        </li>
+        <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
+            تمديد العقد
+        </li>
+    </ol>
+</div>
+
+<!-- Top Row: Contract Info & Tenant Info -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-[25px] mb-[20px] items-stretch">
+    <!-- Contract Info Card (with Unit Info embedded) -->
+    <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md h-full flex flex-col justify-between">
+        <div class="trezo-card-content flex flex-col gap-[20px] h-full">
+            <div class="flex items-center gap-[20px] mb-[10px]">
+                <div class="w-[60px] h-[60px] rounded-full bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center">
+                    <i class="material-symbols-outlined !text-[32px] text-primary-500">description</i>
+                </div>
+                <div>
+                    <h4 class="!text-[18px] !mb-[4px] text-black dark:text-white">
+                        {{ contract.tenant.full_name }}
+                    </h4>
+                    <span class="block text-gray-500 text-sm">
+                        رقم العقد: <span class="text-black dark:text-white">#{{ contract.contract_num }}</span>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <h3 class="!text-md !mb-[10px] text-black dark:text-white font-semibold">
+                    معلومات العقد
+                </h3>
+                <ul class="space-y-[8px] text-sm">
+                    <li>
+                        <span class="text-gray-500">تاريخ الدخول:</span>
+                        <span class="text-black dark:text-white">{{ contract.checkin_date }}</span>
+                    </li>
+                    <li>
+                        <span class="text-gray-500">تاريخ الانتهاء:</span>
+                        <span class="text-black dark:text-white">{{ contract.end_date }}</span>
+                    </li>
+                    <li>
+                        <span class="text-gray-500">مدة العقد:</span>
+                        <span class="text-black dark:text-white">{{ contract.duration_days }} يوم</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex items-center gap-[10px] mt-[10px]">
+                <div class="w-[32px] h-[32px] rounded-full bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center">
+                    <i class="material-symbols-outlined !text-[20px] text-primary-500">apartment</i>
+                </div>
+                <div>
+                    <span class="block text-gray-500 text-xs">الوحدة</span>
+                    <span class="text-black dark:text-white font-semibold">{{ contract.apartment.unit_number }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Tenant Info Card -->
+    <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md h-full flex flex-col justify-between">
+        <div class="trezo-card-content flex flex-col gap-[20px] h-full">
+            <h3 class="!text-md !mb-[10px] text-black dark:text-white font-semibold">
+                معلومات المستأجر
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-[10px] text-sm">
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-500">الاسم الكامل:</span>
+                    <span class="text-black dark:text-white">{{ contract.tenant.full_name }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-500">رقم الهاتف:</span>
+                    <span class="text-black dark:text-white">{{ contract.tenant.tenant_numer }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-500">نوع الهوية:</span>
+                    <span class="text-black dark:text-white">{{ contract.tenant.id_type }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-500">رقم الهوية:</span>
+                    <span class="text-black dark:text-white">{{ contract.tenant.id_number }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contract Extension Card -->
+<div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md w-full max-w-3xl mx-auto">
+    <div class="trezo-card-content">
+        <h3 class="!text-md !mb-[15px] text-black dark:text-white font-semibold">
+            تمديد العقد
+        </h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-[25px]">
+                <div>
+                    <label for="duration_days" class="mb-[12px] font-medium block text-black dark:text-white">
+                        مدة العقد (بالأيام)<span class="text-red-500">*</span>
+                    </label>
+                    <input type="number" name="duration_days" id="duration_days" value="{{ initial_data.duration_days }}" 
+                           class="h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500"
+                           required min="1">
+                </div>
+            </div>
+            <div class="flex justify-end mt-[20px]">
+                <button type="submit" class="inline-block px-[20px] py-[10px] bg-primary-500 text-white rounded-md hover:bg-primary-600 transition">
+                    <span class="inline-block relative ltr:pl-[22px] rtl:pr-[22px]">
+                        <i class="material-symbols-outlined !text-[22px] absolute ltr:-left-[4px] rtl:-right-[4px] top-1/2 -translate-y-1/2">add_alarm</i>
+                        تمديد العقد
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Attachments Card (styled like refrance.html) -->
+{% if contract.images.all %}
+<div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md w-full max-w-3xl mx-auto mt-[20px]">
+    <div class="trezo-card-header mb-[20px] md:mb-[25px] flex items-center justify-between">
+        <div class="trezo-card-title">
+            <h5 class="!mb-0">المرفقات</h5>
+        </div>
+    </div>
+    <div class="trezo-card-content">
+        <ul>
+            {% for image in contract.images.all %}
+            <li class="rounded-md flex justify-between items-center bg-gray-50 dark:bg-[#15203c] p-[15px] mb-[10px] last:mb-0">
+                <div class="flex items-center">
+                    <div class="bg-white dark:bg-[#0c1427] text-primary-500 rounded-full text-center leading-[40px] text-[22px] w-[40px] h-[40px] flex items-center justify-center">
+                        <i class="ri-image-line"></i>
+                    </div>
+                    <div class="ltr:ml-[12px] rtl:mr-[12px]">
+                        <h6 class="!text-base !mb-[3px] !font-medium">
+                            {{ image.name }}
+                        </h6>
+                        <span class="block text-sm">
+                            <a href="{{ image.url }}" target="_blank" class="text-primary-500 underline">عرض الصورة</a>
+                        </span>
+                    </div>
+                </div>
+                <a href="{{ image.url }}" download class="leading-none text-primary-500 text-[22px]">
+                    <i class="ri-download-2-line"></i>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+{% endblock %} 

@@ -25,138 +25,209 @@
     </ol>
 </div>
 
-<div class="trezo-card bg-white dark:bg-[#0c1427] mb-[25px] p-[20px] md:p-[25px] rounded-md">
-    <div class="trezo-card-header mb-[20px] md:mb-[25px] sm:flex items-center justify-between">
-        <div class="trezo-card-title">
-            <h6 class="!mb-0 font-bold text-lg text-black dark:text-white">تفاصيل العقد</h6>
-        </div>
-        <div class="trezo-card-subtitle mt-[15px] sm:mt-0">
-            {% if contract.status == 'active' %}
-            <a href="{% url 'P002:contracts_edit' contract.id %}" class="inline-block transition-all rounded-md font-medium px-[13px] py-[6px] text-primary-500 border border-primary-500 hover:bg-primary-500 hover:text-white ml-2">
-                <span class="inline-block relative ltr:pl-[22px] rtl:pr-[22px]">
-                    <i class="material-symbols-outlined !text-[22px] absolute ltr:-left-[4px] rtl:-right-[4px] top-1/2 -translate-y-1/2">edit</i>
-                    تعديل العقد
-                </span>
-            </a>
-            {% endif %}
-            <a href="?pdf=1" target="_blank" class="inline-block transition-all rounded-md font-medium px-[13px] py-[6px] text-primary-500 border border-primary-500 hover:bg-primary-500 hover:text-white">
-                <span class="inline-block relative ltr:pl-[22px] rtl:pr-[22px]">
-                    <i class="material-symbols-outlined !text-[22px] absolute ltr:-left-[4px] rtl:-right-[4px] top-1/2 -translate-y-1/2">picture_as_pdf</i>
-                    تصدير PDF
-                </span>
-            </a>
-        </div>
-    </div>
-
-    <div class="trezo-card-content">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-[25px]">
-            <div>
-                <h6 class="text-black dark:text-white font-bold mb-[15px]">معلومات العقد</h6>
-                <ul class="space-y-[15px]">
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-500">رقم العقد:</span>
-                        <span class="text-black dark:text-white">#{{ contract.contract_num }}</span>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-[25px] mb-[25px]">
+    <!-- Left Column -->
+    <div class="lg:col-span-1">
+        <!-- Contract Overview Card -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-content">
+                <div class="flex items-center gap-[20px] mb-[20px] md:mb-[25px]">
+                    <div class="w-[100px] h-[100px] rounded-full bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center">
+                        <i class="material-symbols-outlined !text-[40px] text-primary-500">description</i>
+                    </div>
+                    <div>
+                        <h4 class="!text-[20px] !mb-[6px] text-black dark:text-white">
+                            {{ contract.tenant.full_name }}
+                        </h4>
+                        <span class="block text-gray-500">
+                            رقم العقد: <span class="text-black dark:text-white">#{{ contract.contract_num }}</span>
+                        </span>
+                    </div>
+                </div>
+                <h3 class="!text-lg !mb-[15px] text-black dark:text-white">
+                    معلومات العقد
+                </h3>
+                <ul>
+                    <li class="mb-[12px] last:mb-0">
+                        تاريخ الإصدار: <span class="text-black dark:text-white">{{ contract.issue_date }}</span>
                     </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-500">تاريخ الإصدار:</span>
-                        <span class="text-black dark:text-white">{{ contract.issue_date }}</span>
+                    <li class="mb-[12px] last:mb-0">
+                        تاريخ الدخول: <span class="text-black dark:text-white">{{ contract.checkin_date }}</span>
                     </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-500">تاريخ الدخول:</span>
-                        <span class="text-black dark:text-white">{{ contract.checkin_date }}</span>
+                    <li class="mb-[12px] last:mb-0">
+                        تاريخ الانتهاء: <span class="text-black dark:text-white">{{ contract.end_date }}</span>
                     </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-500">مدة العقد:</span>
-                        <span class="text-black dark:text-white">{{ contract.duration_days }} يوم</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-500">سعر الإيجار:</span>
-                        <span class="text-black dark:text-white">{{ contract.rent_price|format_number }} SDG</span>
-                    </li>
-                    <li class="flex items-center justify-between">
-                        <span class="text-gray-500">طريقة الدفع:</span>
-                        <span class="text-black dark:text-white">{{ contract.payment_method }}</span>
+                    <li class="mb-[12px] last:mb-0">
+                        مدة العقد: <span class="text-black dark:text-white">{{ contract.duration_days }} يوم</span>
                     </li>
                 </ul>
             </div>
-            <div>
-                <h6 class="text-black dark:text-white font-bold mb-[15px]">معلومات المستأجر</h6>
-                <ul class="space-y-[15px]">
-                    <li class="flex items-center justify-between">
+        </div>
+
+        <!-- Payment Info Card -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-content flex items-center gap-[15px]">
+                <div class="w-[40px] h-[40px] rounded-full bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center">
+                    <i class="material-symbols-outlined !text-[24px] text-primary-500">payments</i>
+                </div>
+                <div>
+                    <span class="block text-gray-500">
+                        سعر الإيجار
+                    </span>
+                    <h5 class="!mb-0 !font-semibold !text-md mt-[4px] text-black dark:text-white">
+                        {{ contract.rent_price|format_number }} SDG
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Method Card -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-content flex items-center gap-[15px]">
+                <div class="w-[40px] h-[40px] rounded-full bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center">
+                    <i class="material-symbols-outlined !text-[24px] text-primary-500">account_balance</i>
+                </div>
+                <div>
+                    <span class="block text-gray-500">
+                        طريقة الدفع
+                    </span>
+                    <h5 class="!mb-0 !font-semibold !text-md mt-[4px] text-black dark:text-white">
+                        {{ contract.payment_method }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unit Info Card -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+            <div class="trezo-card-content flex items-center gap-[15px]">
+                <div class="w-[40px] h-[40px] rounded-full bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center">
+                    <i class="material-symbols-outlined !text-[24px] text-primary-500">apartment</i>
+                </div>
+                <div>
+                    <span class="block text-gray-500">
+                        الوحدة
+                    </span>
+                    <h5 class="!mb-0 !font-semibold !text-md mt-[4px] text-black dark:text-white">
+                        {{ contract.apartment.unit_number }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="lg:col-span-2">
+        <!-- Tenant Information -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-content">
+                <h3 class="!text-lg !mb-[15px] text-black dark:text-white">
+                    معلومات المستأجر
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-[15px]">
+                    <div class="flex items-center justify-between">
                         <span class="text-gray-500">الاسم الكامل:</span>
                         <span class="text-black dark:text-white">{{ contract.tenant.full_name }}</span>
-                    </li>
-                    <li class="flex items-center justify-between">
+                    </div>
+                    <div class="flex items-center justify-between">
                         <span class="text-gray-500">رقم الهاتف:</span>
                         <span class="text-black dark:text-white">{{ contract.tenant.tenant_numer }}</span>
-                    </li>
-                    <li class="flex items-center justify-between">
+                    </div>
+                    <div class="flex items-center justify-between">
                         <span class="text-gray-500">نوع الهوية:</span>
                         <span class="text-black dark:text-white">{{ contract.tenant.id_type }}</span>
-                    </li>
-                    <li class="flex items-center justify-between">
+                    </div>
+                    <div class="flex items-center justify-between">
                         <span class="text-gray-500">رقم الهوية:</span>
                         <span class="text-black dark:text-white">{{ contract.tenant.id_number }}</span>
-                    </li>
-                    {% comment %} {% if contract.tenant.id_image %}
-                    <li class="mt-4">
-                        <span class="text-gray-500 block mb-2">صورة الهوية:</span>
-                        <div class="relative w-full max-w-[300px] mx-auto">
-                            
-                            <img src="{{ contract.tenant.id_image.url }}" 
-                            
-                                 alt="صورة الهوية" 
-                                 class="w-full h-auto rounded-lg shadow-md border border-gray-200 dark:border-gray-700"
-                                 onclick="window.open(this.src, '_blank')"
-                                 style="cursor: pointer; max-height: 300px; object-fit: contain;">
-                            <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-10 transition-all duration-200 rounded-lg"></div>
-                        </div>
-                    </li>
-                    {% else %}
-                    <li class="mt-4">
-                        <span class="text-gray-500 block mb-2">صورة الهوية:</span>
-                        <div class="relative w-full max-w-[300px] mx-auto">
-                            <div class="w-full h-[200px] rounded-lg shadow-md border border-gray-200 dark:border-gray-700 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-                                <span class="text-gray-400">لا توجد صورة</span>
-                            </div>
-                        </div>
-                    </li>
-                    {% endif %} {% endcomment %}
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
         {% if terms %}
-        <div class="mt-[25px] pt-[25px] border-t border-gray-200 dark:border-[#172036]">
-            <h6 class="text-black dark:text-white font-bold mb-[15px]">شروط العقد</h6>
-            <div class="text-gray-500">
-                <ol class="list-decimal list-inside space-y-2 pr-4">
-                    {% for term in terms_list %}
-                        <li>{{ term }}</li>
-                    {% endfor %}
-                </ol>
-            </div>
-            <div class="mt-[25px] pt-[25px] border-t border-gray-200 dark:border-[#172036] text-center">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-[25px]">
-                    <div class="text-center">
-                        <p class="text-gray-500 mb-[10px]">المؤجر</p>
-                        <div class="h-[50px] border-b border-gray-200 dark:border-[#172036]"></div>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-gray-500 mb-[10px]">المستأجر</p>
-                        <div class="h-[50px] border-b border-gray-200 dark:border-[#172036]"></div>
-                    </div>
+        <!-- Contract Terms -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-content">
+                <h3 class="!text-lg !mb-[15px] text-black dark:text-white">
+                    شروط العقد
+                </h3>
+                <div class="text-gray-500">
+                    <ol class="list-decimal list-inside space-y-2 pr-4">
+                        {% for term in terms_list %}
+                            <li>{{ term }}</li>
+                        {% endfor %}
+                    </ol>
                 </div>
             </div>
         </div>
         {% endif %}
 
         {% if contract.notes %}
-        <div class="mt-[25px] pt-[25px] border-t border-gray-200 dark:border-[#172036]">
-            <h6 class="text-black dark:text-white font-bold mb-[15px]">ملاحظات</h6>
-            <p class="text-gray-500">{{ contract.notes }}</p>
+        <!-- Notes -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+            <div class="trezo-card-content">
+                <h3 class="!text-lg !mb-[15px] text-black dark:text-white">
+                    ملاحظات
+                </h3>
+                <p class="text-gray-500">{{ contract.notes }}</p>
+            </div>
         </div>
         {% endif %}
     </div>
 </div>
+
+<!-- Action Buttons -->
+<div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+    <div class="trezo-card-content flex justify-end gap-4">
+        {% if contract.status == 'active' %}
+        <a href="{% url 'P002:contracts_edit' contract.id %}" class="inline-block transition-all rounded-md font-medium px-[13px] py-[6px] text-primary-500 border border-primary-500 hover:bg-primary-500 hover:text-white">
+            <span class="inline-block relative ltr:pl-[22px] rtl:pr-[22px]">
+                <i class="material-symbols-outlined !text-[22px] absolute ltr:-left-[4px] rtl:-right-[4px] top-1/2 -translate-y-1/2">edit</i>
+                تعديل العقد
+            </span>
+        </a>
+        {% endif %}
+        <a href="?pdf=1" target="_blank" class="inline-block transition-all rounded-md font-medium px-[13px] py-[6px] text-primary-500 border border-primary-500 hover:bg-primary-500 hover:text-white">
+            <span class="inline-block relative ltr:pl-[22px] rtl:pr-[22px]">
+                <i class="material-symbols-outlined !text-[22px] absolute ltr:-left-[4px] rtl:-right-[4px] top-1/2 -translate-y-1/2">picture_as_pdf</i>
+                تصدير PDF
+            </span>
+        </a>
+    </div>
+</div>
+
+{% if contract.images.all %}
+<div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md w-full max-w-3xl mx-auto mt-[20px]">
+    <div class="trezo-card-header mb-[20px] md:mb-[25px] flex items-center justify-between">
+        <div class="trezo-card-title">
+            <h5 class="!mb-0">المرفقات</h5>
+        </div>
+    </div>
+    <div class="trezo-card-content">
+        <ul>
+            {% for image in contract.images.all %}
+            <li class="rounded-md flex justify-between items-center bg-gray-50 dark:bg-[#15203c] p-[15px] mb-[10px] last:mb-0">
+                <div class="flex items-center">
+                    <div class="bg-white dark:bg-[#0c1427] text-primary-500 rounded-full text-center leading-[40px] text-[22px] w-[40px] h-[40px] flex items-center justify-center">
+                        <i class="ri-image-line"></i>
+                    </div>
+                    <div class="ltr:ml-[12px] rtl:mr-[12px]">
+                        <h6 class="!text-base !mb-[3px] !font-medium">
+                            {{ image.name }}
+                        </h6>
+                        <span class="block text-sm">
+                            <a href="{{ image.url }}" target="_blank" class="text-primary-500 underline">عرض الصورة</a>
+                        </span>
+                    </div>
+                </div>
+                <a href="{{ image.url }}" download class="leading-none text-primary-500 text-[22px]">
+                    <i class="ri-download-2-line"></i>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
 {% endblock %} 

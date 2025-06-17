@@ -105,11 +105,14 @@ def status(request):
 def occupied(request):
     # Get occupied apartments with their active contracts
     occupied_apartments = []
-    for apartment in Apartment.objects.filter(is_occupied=True).order_by('unit_number'):
+    for apartment in Apartment.objects.filter(is_occupied=True):
         contract = RentalContract.objects.filter(apartment=apartment, status='active').first()
         if contract:
             apartment.active_contract = contract
             occupied_apartments.append(apartment)
+    
+    # Sort occupied apartments by contract end date
+    occupied_apartments.sort(key=lambda x: x.active_contract.end_date)
     
     # Pagination
     paginator = Paginator(occupied_apartments, 10)  # Show 10 items per page
@@ -169,3 +172,24 @@ def edit_pricing(request, id):
         return redirect('P002:apartments_pricing')
         
     return render(request, 'P002_apartments/edit_pricing.html', {'apartment': apartment})
+
+@login_required
+def archive_contract(request, contract_id):
+    contract = get_object_or_404(RentalContract, id=contract_id)
+    
+    if request.method == 'POST':
+        # Update contract status to expired
+        contract.status = 'expired'
+        contract.save()
+        
+        # Update apartment occupancy
+        contract.apartment.is_occupied = False
+        contract.apartment.save()
+        
+        messages.success(request, 'تم أرشفة العقد بنجاح')
+        return redirect('P002:apartments_occupied')
+    
+    context = {
+        'contract': contract
+    }
+    return render(request, 'P002_apartments/archive_contract.html', context)

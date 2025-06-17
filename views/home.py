@@ -9,7 +9,7 @@ def show(request):
     search_query = request.GET.get('search', '')
     
     # Get total counts
-    total_contracts = RentalContract.objects.count()
+    total_contracts = RentalContract.objects.filter(status='active').count()
     total_apartments = Apartment.objects.count()
     available_apartments = Apartment.objects.filter(is_occupied=False).count()
     occupied_apartments = Apartment.objects.filter(is_occupied=True).count()
