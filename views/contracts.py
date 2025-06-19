@@ -137,15 +137,21 @@ def edit(request, contract_id):
 @login_required
 def mark_expired(request, contract_id):
     contract = get_object_or_404(RentalContract, id=contract_id)
-    if request.method == 'POST':
-        contract.status = 'expired'
-        contract.save()
-        # Update apartment status
-        apartment = contract.apartment
-        apartment.is_occupied = False
-        apartment.save()
-        messages.success(request, 'تم تغيير حالة العقد إلى منتهي بنجاح')
-        return redirect('P002:apartments_occupied')
+    contract.status = 'expired'
+    contract.save()
+
+    # Update apartment status
+    apartment = contract.apartment
+    apartment.is_occupied = False
+    apartment.save()
+
+    messages.success(request, 'تم تغيير حالة العقد إلى منتهي بنجاح')
+
+    # Redirect to where the request came from
+    referer = request.META.get('HTTP_REFERER')
+    if referer:
+        return redirect(referer)
+    return redirect('P002:contracts_show')
     return render(request, 'P002_contracts/archive.html', {'contract': contract})
 
 
