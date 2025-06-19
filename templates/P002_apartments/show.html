@@ -47,6 +47,7 @@
                         <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">النوع</th>
                         <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">السعر الشهري</th>
                         <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">الحالة</th>
+                        <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">أنشئ بواسطة</th>
                         <th class="text-center font-medium px-[20px] py-[11px] bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">الإجراء</th>
                     </tr>
                 </thead>
@@ -56,7 +57,14 @@
                         <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.unit_number }}</td>
                         <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.unit_type }}</td>
                         <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.monthly_rent }} SDG</td>
-                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap">{{ apartment.is_occupied }}</td>
+                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap">
+                            {% if apartment.is_occupied %}
+                                <span class="text-danger-500">محجوزة</span>
+                            {% else %}
+                                <span class="text-success-500">متاحة</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center px-[20px] py-[11px] whitespace-nowrap text-gray-500">{{ apartment.created_by.username|default:"غير محدد" }}</td>
                         <td class="text-center px-[20px] py-[11px] whitespace-nowrap">
                             <div class="flex items-center justify-center gap-[9px]">
                                 <a href="{% url 'P002:apartments_edit' apartment.id %}" class="text-gray-500 dark:text-gray-400 custom-tooltip" data-text="تعديل">
@@ -70,12 +78,10 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5" class="text-center py-4 text-gray-500">لا توجد وحدات حالياً.</td>
+                        <td colspan="6" class="text-center py-4 text-gray-500">لا توجد وحدات حالياً.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
-                
-                
             </table>
         </div>
     </div>

@@ -1,0 +1,16 @@
+{% extends "layouts/dashboard.html" %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[25px] mb-[25px]">
+    <!-- Total Contracts Card -->
+    <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+        <div class="flex items-center justify-between mb-[15px]">
+            <h5 class="text-black dark:text-white font-medium">إدارة المستخدمين</h5>
+            <div class="w-[36px] h-[36px] rounded-full bg-primary-500/20 flex items-center justify-center">
+                <i class="material-symbols-outlined text-primary-500">description</i>
+            </div>
+        </div>
+        <h3 class="text-2xl font-bold text-black dark:text-white mb-[5px]">{{ total_users }}</h3>
+        <a href="{% url 'P002:users_show' %}" class="text-sm text-primary-500 hover:underline">عرض المستخدمين</a>
+    </div>
+</div>
+{% endblock %}

@@ -13,7 +13,7 @@ import os
 
 def show(request):
     search_query = request.GET.get('search', '')
-    contracts = RentalContract.objects.select_related('tenant', 'apartment').filter(status='active')
+    contracts = RentalContract.objects.select_related('tenant', 'apartment', 'created_by').filter(status='active')
     
     if search_query:
         contracts = contracts.filter(
@@ -33,13 +33,13 @@ def show(request):
     return render(request, 'P002_contracts/show.html', {
         'contracts': page_obj,
         'page_obj': page_obj,
-        'search_query': search_query
+        'search_query': search_query,
     })
 
 
 def archive(request):
     search_query = request.GET.get('search', '')
-    contracts = RentalContract.objects.select_related('tenant', 'apartment').filter(status='expired')
+    contracts = RentalContract.objects.select_related('tenant', 'apartment', 'created_by').filter(status='expired')
     
     if search_query:
         contracts = contracts.filter(
@@ -72,6 +72,7 @@ def add(request):
             tenant = tenant_form.save()
             contract = contract_form.save(commit=False)
             contract.tenant = tenant
+            contract.created_by = request.user  # Set the created_by field
 
             # Get the last contract with a non-null contract number
             last_contract = RentalContract.objects.exclude(contract_num__isnull=True).order_by('-contract_num').first()
@@ -90,7 +91,7 @@ def add(request):
 
 
 def view(request, contract_id):
-    contract = get_object_or_404(RentalContract.objects.select_related('tenant', 'apartment'), id=contract_id)
+    contract = get_object_or_404(RentalContract.objects.select_related('tenant', 'apartment', 'created_by'), id=contract_id)
     active_terms = ContractTerms.objects.filter(is_active=True).first()
     
     terms_list = []

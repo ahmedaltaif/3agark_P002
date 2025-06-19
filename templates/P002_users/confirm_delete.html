@@ -1,0 +1,86 @@
+{% extends "layouts/dashboard.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="mb-[25px]">
+    <nav class="flex" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{% url 'P002:home' %}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-primary-500 dark:text-gray-400 dark:hover:text-white">
+                    <i class="material-symbols-outlined mr-2">home</i>
+                    الرئيسية
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <i class="material-symbols-outlined text-gray-400 mx-2">chevron_right</i>
+                    <a href="{% url 'P002:users_show' %}" class="text-sm font-medium text-gray-700 hover:text-primary-500 dark:text-gray-400 dark:hover:text-white">
+                        المستخدمين
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <i class="material-symbols-outlined text-gray-400 mx-2">chevron_right</i>
+                    <span class="text-sm font-medium text-gray-500 dark:text-gray-400">حذف المستخدم</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+</div>
+
+<!-- Delete Confirmation -->
+<div class="trezo-card bg-white dark:bg-[#0c1427] mb-[25px] p-[20px] md:p-[25px] rounded-md">
+    <div class="trezo-card-header mb-[20px] md:mb-[25px]">
+        <div class="flex items-center justify-between">
+            <h5 class="!mb-0 font-bold text-lg text-black dark:text-white">تأكيد الحذف</h5>
+            <div class="w-[36px] h-[36px] rounded-full bg-red-500/20 flex items-center justify-center">
+                <i class="material-symbols-outlined text-red-500">warning</i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="trezo-card-content">
+        <div class="text-center py-8">
+            <div class="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+                <i class="material-symbols-outlined text-red-500 text-2xl">delete</i>
+            </div>
+            
+            <h3 class="text-lg font-semibold text-black dark:text-white mb-2">هل أنت متأكد من حذف هذا المستخدم؟</h3>
+            
+            <div class="bg-gray-50 dark:bg-[#15203c] rounded-lg p-4 mb-6">
+                <div class="flex items-center justify-center mb-2">
+                    <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center mr-3">
+                        <i class="material-symbols-outlined text-primary-500">person</i>
+                    </div>
+                    <div class="text-left">
+                        <p class="font-medium text-black dark:text-white">
+                            {% if user.first_name and user.last_name %}
+                                {{ user.first_name }} {{ user.last_name }}
+                            {% else %}
+                                {{ user.username }}
+                            {% endif %}
+                        </p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ user.email|default:"لا يوجد بريد إلكتروني" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-gray-600 dark:text-gray-400 mb-6">
+                هذا الإجراء لا يمكن التراجع عنه. سيتم حذف المستخدم نهائياً من النظام.
+            </p>
+            
+            <form method="post" class="flex justify-center space-x-3 space-x-reverse">
+                {% csrf_token %}
+                <a href="{% url 'P002:users_show' %}" class="px-6 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
+                    إلغاء
+                </a>
+                <button type="submit" class="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                    حذف المستخدم
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

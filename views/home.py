@@ -15,7 +15,7 @@ def show(request):
     occupied_apartments = Apartment.objects.filter(is_occupied=True).count()
 
     # Get recent contracts and apartments with search
-    recent_contracts = RentalContract.objects.all()
+    recent_contracts = RentalContract.objects.select_related('tenant', 'apartment', 'created_by')
     recent_apartments = Apartment.objects.all()
 
     if search_query:

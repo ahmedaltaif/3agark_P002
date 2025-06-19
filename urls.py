@@ -6,6 +6,8 @@ from P002.views import home
 from P002.views import contracts
 from P002.views import apartments
 from P002.views import auth
+from P002.views import setting
+from P002.views import users
 
 app_name = 'P002'
 
@@ -39,4 +41,15 @@ urlpatterns = [
     path('contracts/terms/', contracts.terms_list, name='contracts_terms'),
     path('contracts/terms/add/', contracts.terms_add, name='contracts_terms_add'),
     path('contracts/terms/<int:terms_id>/edit/', contracts.terms_edit, name='contracts_terms_edit'),
+
+    # Users Management
+    path('users/', users.show_users, name='users_show'),
+    path('users/add/', users.add_user, name='users_add'),
+    path('users/<int:user_id>/edit/', users.edit_user, name='users_edit'),
+    path('users/<int:user_id>/delete/', users.confirm_delete_user, name='users_delete'),
+
+    # Settings
+    path('settings/', setting.show, name='settings_show'),
+
+    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

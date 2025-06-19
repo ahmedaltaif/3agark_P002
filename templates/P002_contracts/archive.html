@@ -68,6 +68,9 @@
                             المدة (يوم)
                         </th>
                         <th class="font-medium ltr:text-left rtl:text-right px-[20px] py-[11px] md:ltr:first:pl-[25px] md:rtl:first:pr-[25px] ltr:first:pr-0 rtl:first:pl-0 bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">
+                            أنشئ بواسطة
+                        </th>
+                        <th class="font-medium ltr:text-left rtl:text-right px-[20px] py-[11px] md:ltr:first:pl-[25px] md:rtl:first:pr-[25px] ltr:first:pr-0 rtl:first:pl-0 bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">
                             الإجراء
                         </th>
                     </tr>
@@ -81,6 +84,7 @@
                         <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ contract.rent_price|format_number }} SDG</td>
                         <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ contract.checkin_date }}</td>
                         <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ contract.duration_days }}</td>
+                        <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap text-gray-500">{{ contract.created_by.username|default:"غير محدد" }}</td>
                         <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">
                             <div class="flex items-center gap-[9px]">
                                 <a href="{% url 'P002:contracts_view' contract.id %}" class="text-primary-500 leading-none custom-tooltip" data-text="عرض">
@@ -91,7 +95,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="text-center py-4 text-gray-500">لا توجد عقود في الأرشيف.</td>
+                        <td colspan="8" class="text-center py-4 text-gray-500">لا توجد عقود في الأرشيف.</td>
                     </tr>
                     {% endfor %}
                 </tbody>

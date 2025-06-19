@@ -3,7 +3,7 @@
 {% block content %}
 <!-- Breadcrumb -->
 <div class="mb-[25px] md:flex items-center justify-between rtl:flex-row-reverse">
-    <h5 class="!mb-0">إدارة العقود</h5>
+    <h5 class="!mb-0">إدارة المستأجرين</h5>
     <ol class="breadcrumb mt-[12px] md:mt-0 rtl:justify-start">
         <li class="breadcrumb-item inline-block relative text-sm mx-[11px] ltr:first:ml-0 rtl:first:mr-0 ltr:last:mr-0 rtl:last:ml-0">
             <a href="{% url 'P002:home' %}" class="inline-block relative ltr:pl-[22px] rtl:pr-[22px] transition-all hover:text-primary-500">
@@ -29,7 +29,7 @@
                 <input type="text" name="search" placeholder="ابحث عن عقد..." class="bg-gray-50 border border-gray-50 h-[36px] text-xs rounded-md w-full block text-black pt-[11px] pb-[12px] ltr:pl-[38px] rtl:pr-[38px] ltr:pr-[13px] rtl:pl-[13px] placeholder:text-gray-500 outline-0 dark:bg-[#15203c] dark:text-white dark:border-[#15203c] dark:placeholder:text-gray-400">
             </form>
         </div>
-        <div class="trezo-card-subtitle mt-[15px] sm:mt-0 flex gap-[15px]">
+        <div class="trezo-card-subtitle mt-[15px] sm:mt-0 flex flex-row gap-[15px]">
             <a href="{% url 'P002:contracts_terms' %}" class="inline-block transition-all rounded-md font-medium px-[13px] py-[6px] text-gray-500 border border-gray-500 hover:bg-gray-500 hover:text-white">
                 <span class="inline-block relative ltr:pl-[22px] rtl:pr-[22px]">
                     <i class="material-symbols-outlined !text-[22px] absolute ltr:-left-[4px] rtl:-right-[4px] top-1/2 -translate-y-1/2">description</i>
@@ -75,6 +75,9 @@
                             المدة (يوم)
                         </th>
                         <th class="font-medium ltr:text-left rtl:text-right px-[20px] py-[11px] md:ltr:first:pl-[25px] md:rtl:first:pr-[25px] ltr:first:pr-0 rtl:first:pl-0 bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">
+                            أنشئ بواسطة
+                        </th>
+                        <th class="font-medium ltr:text-left rtl:text-right px-[20px] py-[11px] md:ltr:first:pl-[25px] md:rtl:first:pr-[25px] ltr:first:pr-0 rtl:first:pl-0 bg-primary-50 dark:bg-[#15203c] whitespace-nowrap">
                             الإجراء
                         </th>
                     </tr>
@@ -88,6 +91,7 @@
                         <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ contract.rent_price|format_number }} SDG</td>
                         <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ contract.checkin_date }}</td>
                         <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">{{ contract.duration_days }}</td>
+                        <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap text-gray-500">{{ contract.created_by.username|default:"غير محدد" }}</td>
                         <td class="ltr:text-left rtl:text-right px-[20px] py-[11px] whitespace-nowrap">
                             <div class="flex items-center gap-[9px]">
                                 <a href="{% url 'P002:contracts_view' contract.id %}" class="text-primary-500 leading-none custom-tooltip" data-text="عرض">
@@ -107,7 +111,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="text-center py-4 text-gray-500">لا توجد عقود حالياً.</td>
+                        <td colspan="8" class="text-center py-4 text-gray-500">لا توجد عقود حالياً.</td>
                     </tr>
                     {% endfor %}
                 </tbody>

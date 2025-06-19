@@ -42,44 +42,44 @@
                     </label>
                     {{ tenant_form.tenant_numer }}
                 </div>
-                <div>
-                    <label for="{{ tenant_form.id_image.id_for_label }}" class="mb-[10px] text-black dark:text-white font-medium block">
-                        {{ tenant_form.id_image.label }}{% if tenant_form.id_image.field.required %}<span class="text-red-500">*</span>{% endif %}
-                    </label>
-                    <div id="fileUploader" class="relative">
-                        <div class="upload-box relative flex items-center justify-center overflow-hidden rounded-md py-[88px] px-[20px] border border-gray-200 dark:border-[#172036]">
-                            <div class="flex items-center justify-center">
-                                <div class="w-[35px] h-[35px] border border-gray-100 dark:border-[#15203c] flex items-center justify-center rounded-md text-primary-500 text-lg ltr:mr-[12px] rtl:ml-[12px]">
-                                    <i class="ri-upload-2-line"></i>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-[25px]">
+                    <div>
+                        <label for="{{ tenant_form.id_image.id_for_label }}" class="mb-[10px] text-black dark:text-white font-medium block">
+                            {{ tenant_form.id_image.label }}{% if tenant_form.id_image.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        <div id="fileUploader">
+                            <div class="relative flex items-center justify-center overflow-hidden rounded-md py-[40px] px-[20px] border border-gray-200 dark:border-[#172036]">
+                                <div class="flex items-center justify-center">
+                                    <div class="w-[35px] h-[35px] border border-gray-100 dark:border-[#15203c] flex items-center justify-center rounded-md text-primary-500 text-lg ltr:mr-[12px] rtl:ml-[12px]">
+                                        <i class="ri-upload-2-line"></i>
+                                    </div>
+                                    <p class="!leading-[1.5]">
+                                        <strong class="text-black dark:text-white">انقر للتحميل</strong><br> الملف الخاص بك هنا
+                                    </p>
                                 </div>
-                                <p class="!leading-[1.5]">
-                                    <strong class="text-black dark:text-white">انقر للتحميل</strong><br> الملف الخاص بك هنا
-                                </p>
+                                <input type="file" name="id_image" id="fileInput" class="absolute top-0 left-0 right-0 bottom-0 rounded-md z-[1] opacity-0 cursor-pointer" accept="image/*">
                             </div>
-                            <input type="file" name="id_image" id="fileInput" class="absolute top-0 left-0 right-0 bottom-0 h-full w-full opacity-0 cursor-pointer z-[1]" accept="image/*">
+                            <ul id="fileList"></ul>
                         </div>
-                        <!-- Image Preview Area -->
-                        <ul id="fileList"></ul>
                     </div>
-                </div>
-                <div>
-                    <label for="{{ tenant_form.marriage_certificate.id_for_label }}" class="mb-[10px] text-black dark:text-white font-medium block">
-                        {{ tenant_form.marriage_certificate.label }}{% if tenant_form.marriage_certificate.field.required %}<span class="text-red-500">*</span>{% endif %}
-                    </label>
-                    <div id="marriageUploader" class="relative">
-                        <div class="upload-box relative flex items-center justify-center overflow-hidden rounded-md py-[88px] px-[20px] border border-gray-200 dark:border-[#172036]">
-                            <div class="flex items-center justify-center">
-                                <div class="w-[35px] h-[35px] border border-gray-100 dark:border-[#15203c] flex items-center justify-center rounded-md text-primary-500 text-lg ltr:mr-[12px] rtl:ml-[12px]">
-                                    <i class="ri-upload-2-line"></i>
+                    <div>
+                        <label for="{{ tenant_form.marriage_certificate.id_for_label }}" class="mb-[10px] text-black dark:text-white font-medium block">
+                            {{ tenant_form.marriage_certificate.label }}{% if tenant_form.marriage_certificate.field.required %}<span class="text-red-500">*</span>{% endif %}
+                        </label>
+                        <div id="fileUploader2">
+                            <div class="relative flex items-center justify-center overflow-hidden rounded-md py-[40px] px-[20px] border border-gray-200 dark:border-[#172036]">
+                                <div class="flex items-center justify-center">
+                                    <div class="w-[35px] h-[35px] border border-gray-100 dark:border-[#15203c] flex items-center justify-center rounded-md text-primary-500 text-lg ltr:mr-[12px] rtl:ml-[12px]">
+                                        <i class="ri-upload-2-line"></i>
+                                    </div>
+                                    <p class="!leading-[1.5]">
+                                        <strong class="text-black dark:text-white">انقر للتحميل</strong><br> قسيمة الزواج هنا
+                                    </p>
                                 </div>
-                                <p class="!leading-[1.5]">
-                                    <strong class="text-black dark:text-white">انقر للتحميل</strong><br> قسيمة الزواج هنا
-                                </p>
+                                <input type="file" name="marriage_certificate" id="fileInput2" class="absolute top-0 left-0 right-0 bottom-0 rounded-md z-[1] opacity-0 cursor-pointer" accept="image/*">
                             </div>
-                            <input type="file" name="marriage_certificate" id="marriageInput" class="absolute top-0 left-0 right-0 bottom-0 h-full w-full opacity-0 cursor-pointer z-[1]" accept="image/*">
+                            <ul id="fileList2"></ul>
                         </div>
-                        <!-- Image Preview Area -->
-                        <ul id="marriageFileList"></ul>
                     </div>
                 </div>
             </div>

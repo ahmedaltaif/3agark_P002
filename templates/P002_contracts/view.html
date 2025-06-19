@@ -60,6 +60,9 @@
                     <li class="mb-[12px] last:mb-0">
                         مدة العقد: <span class="text-black dark:text-white">{{ contract.duration_days }} يوم</span>
                     </li>
+                    <li class="mb-[12px] last:mb-0">
+                        أنشئ بواسطة: <span class="text-black dark:text-white">{{ contract.created_by.username|default:"غير محدد" }}</span>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -90,7 +93,7 @@
                 <div>
                     <span class="block text-gray-500">
                         طريقة الدفع
-                    </span>
+                    <z/span>
                     <h5 class="!mb-0 !font-semibold !text-md mt-[4px] text-black dark:text-white">
                         {{ contract.payment_method }}
                     </h5>
@@ -114,6 +117,75 @@
                 </div>
             </div>
         </div>
+
+        {% if contract.notes %}
+        <!-- Notes -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md mb-[25px]">
+            <div class="trezo-card-content">
+                <h3 class="!text-lg !mb-[15px] text-black dark:text-white">
+                    ملاحظات
+                </h3>
+                <p class="text-gray-500">{{ contract.notes }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if contract.tenant.id_image or contract.tenant.marriage_certificate %}
+        <!-- Attachments -->
+        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
+            <div class="trezo-card-header mb-[20px] md:mb-[25px] flex items-center justify-between">
+                <div class="trezo-card-title">
+                    <h5 class="!mb-0">
+                        المرفقات
+                    </h5>
+                </div>
+            </div>
+            <div class="trezo-card-content">
+                <ul>
+                    {% if contract.tenant.id_image %}
+                    <li class="rounded-md flex justify-between items-center bg-gray-50 dark:bg-[#15203c] p-[15px] mb-[10px] last:mb-0">
+                        <div class="flex items-center">
+                            <div class="bg-white dark:bg-[#0c1427] text-primary-500 rounded-full text-center leading-[40px] text-[22px] w-[40px] h-[40px] flex items-center justify-center">
+                                <i class="ri-image-line"></i>
+                            </div>
+                            <div class="ltr:ml-[12px] rtl:mr-[12px]">
+                                <h6 class="!text-base !mb-[3px] !font-medium">
+                                    صورة الهوية
+                                </h6>
+                                <span class="block text-sm">
+                                    <a href="{{ contract.tenant.id_image.url }}" target="_blank" class="text-primary-500 underline">عرض الصورة</a>
+                                </span>
+                            </div>
+                        </div>
+                        <a href="{{ contract.tenant.id_image.url }}" download class="leading-none text-primary-500 text-[22px]">
+                            <i class="ri-download-2-line"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if contract.tenant.marriage_certificate %}
+                    <li class="rounded-md flex justify-between items-center bg-gray-50 dark:bg-[#15203c] p-[15px] mb-[10px] last:mb-0">
+                        <div class="flex items-center">
+                            <div class="bg-white dark:bg-[#0c1427] text-primary-500 rounded-full text-center leading-[40px] text-[22px] w-[40px] h-[40px] flex items-center justify-center">
+                                <i class="ri-image-line"></i>
+                            </div>
+                            <div class="ltr:ml-[12px] rtl:mr-[12px]">
+                                <h6 class="!text-base !mb-[3px] !font-medium">
+                                    قسيمة الزواج
+                                </h6>
+                                <span class="block text-sm">
+                                    <a href="{{ contract.tenant.marriage_certificate.url }}" target="_blank" class="text-primary-500 underline">عرض الصورة</a>
+                                </span>
+                            </div>
+                        </div>
+                        <a href="{{ contract.tenant.marriage_certificate.url }}" download class="leading-none text-primary-500 text-[22px]">
+                            <i class="ri-download-2-line"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
     </div>
 
     <!-- Right Column -->
@@ -162,24 +234,12 @@
             </div>
         </div>
         {% endif %}
-
-        {% if contract.notes %}
-        <!-- Notes -->
-        <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
-            <div class="trezo-card-content">
-                <h3 class="!text-lg !mb-[15px] text-black dark:text-white">
-                    ملاحظات
-                </h3>
-                <p class="text-gray-500">{{ contract.notes }}</p>
-            </div>
-        </div>
-        {% endif %}
     </div>
 </div>
 
 <!-- Action Buttons -->
 <div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md">
-    <div class="trezo-card-content flex justify-end gap-4">
+    <div class="trezo-card-content flex justify-end gap-[15px]">
         {% if contract.status == 'active' %}
         <a href="{% url 'P002:contracts_edit' contract.id %}" class="inline-block transition-all rounded-md font-medium px-[13px] py-[6px] text-primary-500 border border-primary-500 hover:bg-primary-500 hover:text-white">
             <span class="inline-block relative ltr:pl-[22px] rtl:pr-[22px]">
@@ -196,38 +256,4 @@
         </a>
     </div>
 </div>
-
-{% if contract.images.all %}
-<div class="trezo-card bg-white dark:bg-[#0c1427] p-[20px] md:p-[25px] rounded-md w-full max-w-3xl mx-auto mt-[20px]">
-    <div class="trezo-card-header mb-[20px] md:mb-[25px] flex items-center justify-between">
-        <div class="trezo-card-title">
-            <h5 class="!mb-0">المرفقات</h5>
-        </div>
-    </div>
-    <div class="trezo-card-content">
-        <ul>
-            {% for image in contract.images.all %}
-            <li class="rounded-md flex justify-between items-center bg-gray-50 dark:bg-[#15203c] p-[15px] mb-[10px] last:mb-0">
-                <div class="flex items-center">
-                    <div class="bg-white dark:bg-[#0c1427] text-primary-500 rounded-full text-center leading-[40px] text-[22px] w-[40px] h-[40px] flex items-center justify-center">
-                        <i class="ri-image-line"></i>
-                    </div>
-                    <div class="ltr:ml-[12px] rtl:mr-[12px]">
-                        <h6 class="!text-base !mb-[3px] !font-medium">
-                            {{ image.name }}
-                        </h6>
-                        <span class="block text-sm">
-                            <a href="{{ image.url }}" target="_blank" class="text-primary-500 underline">عرض الصورة</a>
-                        </span>
-                    </div>
-                </div>
-                <a href="{{ image.url }}" download class="leading-none text-primary-500 text-[22px]">
-                    <i class="ri-download-2-line"></i>
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
-{% endif %}
 {% endblock %} 

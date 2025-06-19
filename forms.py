@@ -221,3 +221,133 @@ class ContractTermsForm(forms.ModelForm):
             'content': 'محتوى الشروط',
             'is_active': 'نشط',
         }
+
+class UserForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30, required=False, label='الاسم الأول')
+    last_name = forms.CharField(max_length=30, required=False, label='الاسم الأخير')
+    phone = forms.CharField(max_length=15, label='رقم الهاتف')
+    role = forms.ChoiceField(choices=[('admin', 'مدير'), ('receptionist', 'موظف استقبال')], label='الدور')
+    password = forms.CharField(widget=forms.PasswordInput(), label='كلمة المرور')
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'phone', 'role', 'password']
+        labels = {
+            'first_name': 'الاسم الأول',
+            'last_name': 'الاسم الأخير',
+            'phone': 'رقم الهاتف',
+            'role': 'الدور',
+            'password': 'كلمة المرور',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Set styling for all text input fields
+        self.fields['first_name'].widget.attrs.update({
+            'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
+            'placeholder': 'مثال: أحمد محمد'
+        })
+        self.fields['last_name'].widget.attrs.update({
+            'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
+            'placeholder': 'مثال: علي'
+        })
+        self.fields['phone'].widget.attrs.update({
+            'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
+            'placeholder': 'مثال: +249 123 456 789'
+        })
+        self.fields['password'].widget.attrs.update({
+            'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
+            'placeholder': 'أدخل كلمة المرور'
+        })
+        
+        # Set the role field styling
+        self.fields['role'].widget.attrs.update({
+            'class': 'h-[55px] rounded-md border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[13px] block w-full outline-0 cursor-pointer transition-all focus:border-primary-500'
+        })
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.username = self.cleaned_data['phone']  # Set username as phone number
+        user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+            # Create or update profile
+            Profile.objects.update_or_create(
+                user=user,
+                defaults={
+                    'role': self.cleaned_data['role'],
+                    'phone': self.cleaned_data['phone']
+                }
+            )
+        return user
+
+class UserUpdateForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30, required=False, label='الاسم الأول')
+    last_name = forms.CharField(max_length=30, required=False, label='الاسم الأخير')
+    password = forms.CharField(widget=forms.PasswordInput(), required=False, label='كلمة المرور')
+    role = forms.ChoiceField(choices=[('admin', 'مدير'), ('receptionist', 'موظف استقبال')], label='الدور')
+    
+    class Meta:
+        model = Profile
+        fields = ['phone', 'role']
+        labels = {
+            'phone': 'رقم الهاتف',
+            'role': 'الدور',
+        }
+        widgets = {
+            'phone': forms.TextInput(attrs={
+                'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
+                'placeholder': 'مثال: +249 123 456 789'
+            }),
+            'password': forms.PasswordInput(attrs={
+                'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
+                'placeholder': 'اتركها فارغة للاحتفاظ بالكلمة الحالية'
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            # If editing existing user, populate User fields
+            user = self.instance.user
+            self.fields['first_name'].initial = user.first_name
+            self.fields['last_name'].initial = user.last_name
+        
+        # Set the role field styling
+        self.fields['role'].widget.attrs.update({
+            'class': 'h-[55px] rounded-md border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[13px] block w-full outline-0 cursor-pointer transition-all focus:border-primary-500'
+        })
+        
+        # Set styling for first_name and last_name fields
+        self.fields['first_name'].widget.attrs.update({
+            'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
+            'placeholder': 'مثال: أحمد محمد'
+        })
+        self.fields['last_name'].widget.attrs.update({
+            'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
+            'placeholder': 'مثال: علي'
+        })
+        self.fields['password'].widget.attrs.update({
+            'class': 'h-[55px] rounded-md text-black dark:text-white border border-gray-200 dark:border-[#172036] bg-white dark:bg-[#0c1427] px-[17px] block w-full outline-0 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-primary-500',
+            'placeholder': 'اتركها فارغة للاحتفاظ بالكلمة الحالية'
+        })
+
+    def save(self, commit=True):
+        profile = super().save(commit=False)
+        
+        if commit:
+            # Update User fields
+            user = profile.user
+            user.first_name = self.cleaned_data.get('first_name', '')
+            user.last_name = self.cleaned_data.get('last_name', '')
+            
+            # Update password if provided
+            password = self.cleaned_data.get('password')
+            if password:
+                user.set_password(password)
+            
+            user.save()
+            profile.save()
+        
+        return profile

@@ -11,7 +11,7 @@ from django.contrib import messages
 @login_required
 def show(request):
     search_query = request.GET.get('search', '')
-    apartments = Apartment.objects.all().order_by('unit_number')
+    apartments = Apartment.objects.select_related('created_by').all().order_by('unit_number')
     
     if search_query:
         apartments = apartments.filter(
